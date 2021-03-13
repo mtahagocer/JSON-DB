@@ -1,7 +1,7 @@
 import jwt from 'express-jwt';
 
 const jwtMV = jwt({
-    secret: process.env.JWT_SECRET || 'alaşsldlşasd',
+    secret: process.env.JWT_SECRET,
     credentialsRequired: true,
 }).unless({ path: ['/api/login', '/api/db-check'] });
 
