@@ -1,8 +1,10 @@
-import jwt from 'express-jwt';
+import expressJwt from 'express-jwt';
+import 'dotenv/config';
 
-const jwtMV = jwt({
+const jwtMV = expressJwt({
     secret: process.env.JWT_SECRET,
     credentialsRequired: true,
+    algorithms: ['HS256']
 }).unless({ path: ['/api/login', '/api/db-check'] });
 
 export default jwtMV;
