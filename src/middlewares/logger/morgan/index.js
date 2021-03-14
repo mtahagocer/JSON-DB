@@ -6,7 +6,7 @@ morgan.token('user', (req) => {
 });
 
 const logger = morgan(
-    ':user\n :date[iso] :status :method\t  :res[content-length]\t :response-time ms\t :url',
+    ':user\t :date[iso] :status :method\t  :res[content-length]\t :response-time ms\t :url',
     {
         stream: fs.createWriteStream('access.log', {
             flags: 'a'

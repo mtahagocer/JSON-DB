@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-export default function bindUser(req, res, next) {
+export default function extractUser(req, res, next) {
     const token = req.headers.authorization;
 
     if (token) {

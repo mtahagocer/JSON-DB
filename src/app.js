@@ -1,27 +1,32 @@
 import express from 'express';
-// import path from 'path';
+import listEndpoints from 'express-list-endpoints';
 import cookieParser from 'cookie-parser';
-import indexRouter from './Routes/index';
 import dotenv from 'dotenv';
 import 'dotenv/config';
-import logger from './Middlewares/Logger/morgan';
+import indexRouter from './Routes/index';
+import loggerMV from './Middlewares/Logger/morgan';
 import jwtMV from './Middlewares/JWT';
 import userMV from './Middlewares/User';
+import errorMV from './Middlewares/Error';
+import './Services/Singleton/create';
 
 dotenv.config();
-let app = express();
+const app = express();
 
-app.use(logger);
+app.use(loggerMV);
 app.use(jwtMV);
 app.use(userMV);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use((err, req, res) => {
-    if (err.name === 'UnauthorizedError') {
-        res.status(401).send('invalid token...');
-    }
-});
 // app.use(express.static(path.join(__dirname, '../public')));
+app.all('/api/routes', (req, res) => {
+    let endpoints = listEndpoints(app);
+    endpoints.splice(0, 1);
+    res.json({ routes: endpoints });
+});
 app.use('/', indexRouter);
+app.on('error', errorMV);
+
+
 export default app;
