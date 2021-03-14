@@ -1,11 +1,15 @@
-import { promises as fs } from 'fs';
+import * as fs from 'fs';
 import * as path from 'path';
 
 class File {
-    static async checkDirectory(destination) {
-        const directory = path.join(destination);
+    static isExist(sourcePath) {
+        return fs.existsSync(sourcePath);
+    }
 
-        if (!fs.is(directory)) {
+    static async checkDirectory(destination) {
+        const directory = path.join(__dirname, destination);
+
+        if (!this.isExist(directory)) {
             await fs.mkdir(directory, { recursive: true });
         }
     }
@@ -35,16 +39,19 @@ class File {
         if (!await this.readFile(sourcePath).includes(patch)) {
             await fs.writeFile(
                 sourcePath,
-                fs
-                    .readFileSync(sourcePath, 'utf8')
-                    .replace(pattern, (match) => `${match}${patch}`)
+                fs.readFileSync(sourcePath, 'utf8').replace(pattern, (match) => `${match}${patch}`)
             );
         }
     }
 
-    static async writeFileAsync(filePath, content) {
+    static async writeFile(filePath, content) {
         await fs.writeFile(filePath, content);
     }
+
+    static async mkdir(filePath) {
+        await fs.mkdir(path.join(filePath), { recursive: true });
+    }
+
 }
 
 export default File;
