@@ -1,11 +1,11 @@
-import { Router } from 'express'
-var router = Router();
+import { Router } from 'express';
+let router = Router();
 
 /* GET home page. */
-router.get('/', function (req, res, next) {
-  res.json({
-    'index': "index"
-  });
-});
+router.get( '/', ( req, res ) => {
+    res.json( {
+        'index': 'index'
+    } );
+} );
 
 export default router;
