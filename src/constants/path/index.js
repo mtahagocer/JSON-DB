@@ -5,10 +5,10 @@ let _paths = {
 };
 
 
-const paths = Object.keys( _paths ).map( ( key ) => {
+const paths = Object.keys(_paths).map((key) => {
     return {
-        [ key ]: path.join( __dirname, _paths[ key ] )
+        [key]: path.join(__dirname, _paths[key])
     };
-} );
+});
 
 export default paths;

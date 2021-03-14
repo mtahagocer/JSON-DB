@@ -2,48 +2,48 @@ import { promises as fs } from 'fs';
 import * as path from 'path';
 
 class File {
-    static async checkDirectory( destination ) {
-        const directory = path.join( destination );
+    static async checkDirectory(destination) {
+        const directory = path.join(destination);
 
-        if ( !fs.is( directory ) ) {
-            await fs.mkdir( directory, { recursive: true } );
+        if (!fs.is(directory)) {
+            await fs.mkdir(directory, { recursive: true });
         }
     }
 
-    static async readFile( sourcePath ) {
-        await fs.readFile( sourcePath, 'utf8' );
+    static async readFile(sourcePath) {
+        await fs.readFile(sourcePath, 'utf8');
     }
 
-    static async copyFile( source, destination ) {
-        await this.checkDirectory( destination );
-        await fs.copyFile( source, destination );
+    static async copyFile(source, destination) {
+        await this.checkDirectory(destination);
+        await fs.copyFile(source, destination);
     }
 
-    static async replaceInFile( sourcePath, destinationPath, replacements = [] ) {
-        await this.checkDirectory( destinationPath );
-        let file = fs.readFileSync( sourcePath, 'utf8' );
+    static async replaceInFile(sourcePath, destinationPath, replacements = []) {
+        await this.checkDirectory(destinationPath);
+        let file = fs.readFileSync(sourcePath, 'utf8');
 
-        replacements.forEach( ( { oldContent, newContent } ) => {
-            file = file.replace( oldContent, newContent );
-        } );
-        return fs.writeFile( destinationPath, file );
+        replacements.forEach(({ oldContent, newContent }) => {
+            file = file.replace(oldContent, newContent);
+        });
+        return fs.writeFile(destinationPath, file);
     }
 
-    static async applyPatch( sourcePath, params ) {
+    static async applyPatch(sourcePath, params) {
         const { pattern, patch } = params;
 
-        if ( !await this.readFile( sourcePath ).includes( patch ) ) {
+        if (!await this.readFile(sourcePath).includes(patch)) {
             await fs.writeFile(
                 sourcePath,
                 fs
-                    .readFileSync( sourcePath, 'utf8' )
-                    .replace( pattern, ( match ) => `${match}${patch}` )
+                    .readFileSync(sourcePath, 'utf8')
+                    .replace(pattern, (match) => `${match}${patch}`)
             );
         }
     }
 
-    static async writeFileAsync( filePath, content ) {
-        await fs.writeFile( filePath, content );
+    static async writeFileAsync(filePath, content) {
+        await fs.writeFile(filePath, content);
     }
 }
 

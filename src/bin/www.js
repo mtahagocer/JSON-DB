@@ -7,22 +7,22 @@
 import app from '../app';
 import debugLib from 'debug';
 import http from 'http';
-const debug = debugLib( 'jsonORM:server' );
+const debug = debugLib('jsonORM:server');
 
 /**
  * Normalize a port into a number, string, or false.
  */
 
-let normalizePort = function( val ) {
-    let port = parseInt( val );
+let normalizePort = function (val) {
+    let port = parseInt(val);
 
-    if ( isNaN( port ) ) {
-    // named pipe
+    if (isNaN(port)) {
+        // named pipe
         return val;
     }
 
-    if ( port >= 0 ) {
-    // port number
+    if (port >= 0) {
+        // port number
         return port;
     }
 
@@ -33,15 +33,15 @@ let normalizePort = function( val ) {
 * Get port from environment and store in Express.
 */
 
-let port = normalizePort( process.env.PORT || '3000' );
+let port = normalizePort(process.env.PORT || '3000');
 
-app.set( 'port', port );
+app.set('port', port);
 
 /**
  * Create HTTP server.
  */
 
-let server = http.createServer( app );
+let server = http.createServer(app);
 
 
 /**
@@ -52,7 +52,7 @@ function onListening() {
     let addr = server.address(),
         bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`;
 
-    debug( `Listening on ${bind}` );
+    debug(`Listening on ${bind}`);
 }
 
 
@@ -60,22 +60,22 @@ function onListening() {
  * Event listener for HTTP server "error" event.
  */
 
-const onError = function( error ) {
-    if ( error.syscall !== 'listen' ) {
+const onError = function (error) {
+    if (error.syscall !== 'listen') {
         throw error;
     }
 
     let bind = typeof port === 'string' ? `Pipe ${port}` : `Port ${port}`;
 
     // handle specific listen errors with friendly messages
-    switch ( error.code ) {
+    switch (error.code) {
         case 'EACCES':
-            console.error( `${bind} requires elevated privileges` );
-            process.exit( 1 );
+            console.error(`${bind} requires elevated privileges`);
+            process.exit(1);
             break;
         case 'EADDRINUSE':
-            console.error( `${bind} is already in use` );
-            process.exit( 1 );
+            console.error(`${bind} is already in use`);
+            process.exit(1);
             break;
         default:
             throw error;
@@ -86,6 +86,6 @@ const onError = function( error ) {
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen( port );
-server.on( 'error', onError );
-server.on( 'listening', onListening );
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);

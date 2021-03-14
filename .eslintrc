@@ -5,29 +5,29 @@
   },
   "parserOptions": {
     "sourceType": "module",
-    "ecmaVersion": 2020
-  },
-  "ecmaFeatures": {
-    "arrowFunctions": true,
-    "blockBindings": true,
-    "classes": true,
-    "defaultParameters": true,
-    "destructuring": true,
-    "forOf": true,
-    "generators": true,
-    "modules": true,
-    "objectLiteralComputedProperties": true,
-    "objectLiteralDuplicateProperties": true,
-    "objectLiteralShorthandMethods": true,
-    "objectLiteralShorthandProperties": true,
-    "regexUFlag": true,
-    "regexYFlag": true,
-    "restParams": true,
-    "spread": true,
-    "superInFunctions": true,
-    "templateStrings": true,
-    "unicodeCodePointEscapes": true,
-    "globalReturn": true
+    "ecmaVersion": 2020,
+    "ecmaFeatures": {
+      "arrowFunctions": true,
+      "blockBindings": true,
+      "classes": true,
+      "defaultParameters": true,
+      "destructuring": true,
+      "forOf": true,
+      "generators": true,
+      "modules": true,
+      "objectLiteralComputedProperties": true,
+      "objectLiteralDuplicateProperties": true,
+      "objectLiteralShorthandMethods": true,
+      "objectLiteralShorthandProperties": true,
+      "regexUFlag": true,
+      "regexYFlag": true,
+      "restParams": true,
+      "spread": true,
+      "superInFunctions": true,
+      "templateStrings": true,
+      "unicodeCodePointEscapes": true,
+      "globalReturn": true
+    }
   },
   "rules": {
     "comma-dangle": [
@@ -131,7 +131,7 @@
     "no-new-require": 2,
     "array-bracket-spacing": [
       2,
-      "always"
+      "never"
     ],
     "block-spacing": [
       2,
@@ -163,7 +163,7 @@
     ],
     "computed-property-spacing": [
       2,
-      "always"
+      "never"
     ],
     "consistent-this": [
       2,
@@ -232,13 +232,9 @@
       2,
       "always"
     ],
-    "space-before-function-paren": [
-      2,
-      "never"
-    ],
     "space-in-parens": [
       2,
-      "always"
+      "never"
     ],
     "space-infix-ops": 2,
     "space-unary-ops": [
