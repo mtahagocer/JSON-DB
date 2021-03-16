@@ -5,21 +5,21 @@ export default class BaseDocument {
     Name: string;
     CreationDate: Date;
     UpdateDate: Date;
-    Collection: string;
+
+    constructor() {
+        this.CreationDate = new Date(Date.now());
+    }
 
     Save = async () => {
         await utils.updateDocument({ ...this });
     }
-    constructor(props: Record<string, any>) {
-        Object.keys(props).map((key) => {
-            this[key] = props[key];
-        });
 
-        this.Collection = props.Collection.Name;
-        this.Id = utils.generateId();
-        this.Name = props.Name;
-        this.CreationDate = new Date(Date.now());
-
-        this.Save.bind(this);
+    SaveDocument = async (documentRef: Object, CollectionName: string) => {
+        console.log({ documentRef });
+        if (!this.Name) {
+            this.Id = utils.generateId();
+            this.Name = documentRef.constructor.name;
+            await utils.createDocument(CollectionName, this);
+        }
     }
 }
