@@ -6,9 +6,8 @@ class File {
         return fs.existsSync(sourcePath);
     }
 
-    static async checkDirectory(destination) {
-        const directory = this.resolveBasePath(destination);
-        console.log({ directory });
+    static async checkDirectory(sourcePath) {
+        const directory = this.resolveBasePath(sourcePath);
         if (!this.isExist(directory)) {
             await fs.mkdir(directory, { recursive: true }, (err) => {
                 if (err) throw err;
@@ -17,7 +16,20 @@ class File {
     }
 
     static async readFile(sourcePath) {
-        await fs.readFile(sourcePath, 'utf8');
+        const directory = this.resolveBasePath(sourcePath);
+
+        return new Promise(async (resolve, reject) => {
+            await fs.readFile(directory, (err, readedData) => {
+                // throw new CustomError(err.message);
+                if (err) reject(err);
+                resolve(JSON.parse(readedData));
+            });
+        });
+    }
+
+    static async deleteFile(sourcePath, force = false) {
+        const directory = this.resolveBasePath(sourcePath);
+        await fs.rmdirSync(directory, { recursive: force });
     }
 
     static async copyFile(source, destination) {
