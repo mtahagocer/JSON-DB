@@ -1,6 +1,4 @@
 import express from 'express';
-import listEndpoints from 'express-list-endpoints';
-import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import 'dotenv/config';
 import indexRouter from './Routes/index';
@@ -8,25 +6,32 @@ import loggerMV from './Middlewares/Logger/morgan';
 import jwtMV from './Middlewares/JWT';
 import userMV from './Middlewares/User';
 import errorMV from './Middlewares/Error';
-import './Services/Singleton/create';
+import asyncHandler from 'express-async-handler';
 
 dotenv.config();
 const app = express();
-
 app.use(loggerMV);
 app.use(jwtMV);
 app.use(userMV);
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+// app.use(express.urlencoded({ extended: false }));
+// app.use(cookieParser());
+
 // app.use(express.static(path.join(__dirname, '../public')));
-app.all('/api/routes', (req, res) => {
-    let endpoints = listEndpoints(app);
-    endpoints.splice(0, 1);
-    res.json({ routes: endpoints });
+app.on('listening', () => {
+    console.log(`Listening on ${process.env.PORT}`);
 });
-app.use('/', indexRouter);
-app.on('error', errorMV);
+app.use('/', asyncHandler(indexRouter));
+
+app.use(errorMV);
+
+app.on('error', (err, req, res, next) => {
+    console.log({ err, req, res, next });
+});
+
+app.listen(process.env.PORT, () => {
+    console.log(`Listening on port ${process.env.PORT}`);
+});
 
 
 export default app;
