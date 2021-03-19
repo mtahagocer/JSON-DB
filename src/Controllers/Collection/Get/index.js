@@ -4,8 +4,8 @@ import asyncHandler from 'express-async-handler';
 
 export default asyncHandler(async (req, res) => {
     const { user } = req;
-    const { Collection = new CustomError('"collection:{Name:\'\'}" is required') } = req.body;
-    const _collection = new BaseCollection({ ...Collection, UserId: user.id });
+    const { Name = new CustomError('Collection "Name" is required') } = req.body;
+    const _collection = new BaseCollection({ Name, UserId: user.id });
     const _data = await _collection.Get();
     res.json({
         success: true,
