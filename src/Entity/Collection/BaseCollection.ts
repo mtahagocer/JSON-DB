@@ -3,7 +3,7 @@ import CustomError from '../CustomError';
 
 export default class BaseCollection {
     private Name: string;
-    Documents: Array<string> = [];
+    DocumentCount: number = 0;
 
     private CreationDate: Date;
     private UpdateDate: Date;
@@ -16,7 +16,7 @@ export default class BaseCollection {
         this.UserId = UserId;
     }
 
-    Get = async () => {
+    Get = async (): Promise<BaseCollection> => {
         return await CollectionActions.getCollection({ ...this });
     }
 
@@ -25,13 +25,13 @@ export default class BaseCollection {
         await CollectionActions.createCollection({ ...this });
     }
 
-    Update = async () => {
+    Update = async (Params: BaseCollection) => {
         this.UpdateDate = new Date(Date.now());
-        await CollectionActions.updateCollection({ ...this });
+        await CollectionActions.updateCollection(Params);
     }
 
     Delete = async (force) => {
         await CollectionActions.deleteCollection({ ...this }, force);
     }
-    
+
 }

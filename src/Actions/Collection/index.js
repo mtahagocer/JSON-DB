@@ -30,7 +30,7 @@ export const getCollection = asyncHandler(async (Collection) => {
 });
 
 export const updateCollection = asyncHandler(async (Collection) => {
-    await fs.writeFile(getCollectionFilePath(Collection.Name, Collection.Id), stringify(Collection));
+    await fs.writeFile(getCollectionFilePath(Collection.UserId, Collection.Name), stringify(Collection));
 });
 
 export const deleteCollection = asyncHandler(async (Collection, force) => {
