@@ -49,3 +49,12 @@ export const filterByPatch = (Patch, DeepEquality) => (dbData) => {
     });
     return isMatch;
 };
+
+export const filterByKeyAndValue = (KeyList, ValueList) => (opposite = true) => (dbData) => {
+    let isMatch = !opposite;
+    KeyList.forEach((key) => {
+        if (ValueList.indexOf(dbData[key]) !== -1) isMatch = opposite;
+    });
+
+    return isMatch;
+};

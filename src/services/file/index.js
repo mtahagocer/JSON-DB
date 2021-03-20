@@ -18,12 +18,14 @@ class File {
     static async readFile(sourcePath) {
         const directory = this.resolveBasePath(sourcePath);
 
-        return new Promise(async (resolve, reject) => {
-            await fs.readFile(directory, (err, readedData) => {
-                // throw new CustomError(err.message);
-                if (err) reject(err);
-                resolve(JSON.parse(readedData));
-            });
+        return new Promise((resolve, reject) => {
+            (async () => {
+                await fs.readFile(directory, (err, readedData) => {
+                    // throw new CustomError(err.message);
+                    if (err) reject(err);
+                    resolve(JSON.parse(readedData));
+                });
+            })();
         });
     }
 
