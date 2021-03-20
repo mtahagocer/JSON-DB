@@ -1,22 +1,49 @@
-import fs from '../Services/File';
+import fs from '../../Services/File';
 import asyncHandler from 'express-async-handler';
-import { getCollectionPath } from '../Collection';
-import { dbPath, stringify } from '../../Helpers';
+import { getCollectionPath, controlCollection } from '../Collection';
+import { stringify } from '../../Helpers';
 
-export const getDocumentFolderPath = (CollectionName, DocumentName) => dbPath(`${CollectionName}/${DocumentName}`);
+export const getDocumentPath = (UserId, CollectionName) => `${getCollectionPath(UserId, CollectionName)}/data.json`;
 
-export const getDocumentPath = (CollectionName, DocumentName, DocumentId) => dbPath(`${CollectionName}/${DocumentName}/${DocumentId}.json`);
+export const getDocument = asyncHandler(async (UserId, CollectionName, filter) => {
+    if (await controlCollection(UserId, CollectionName)) {
+        let data = await fs.readFile(getDocumentPath(UserId, CollectionName));
 
-export const createDocument = asyncHandler(async (CollectionName, Document) => {
-    await fs.checkDirectory(getDocumentFolderPath(CollectionName, Document.Name));
-    await fs.writeFile(getDocumentPath(CollectionName, Document.Name, Document.Id), stringify(Document));
+        if (filter) {
+            data = data.filter(filter);
+        }
+        return data;
+    }
 });
 
-export const updateDocument = asyncHandler(async (Document) => {
-    await fs.writeFile(getDocumentPath(Document.Collection, Document.Name, Document.Id), stringify(Document));
+export const createDocument = asyncHandler(async (UserId, CollectionName, Document) => {
+    const prev = await getDocument(UserId, CollectionName);
+    const newData = [...prev, Document];
+    await fs.writeFile(getDocumentPath(UserId, CollectionName), stringify(newData));
+    return Document;
 });
 
-export const addDocument = asyncHandler(async (Collection, Document) => {
-    await fs.writeFile(dbPath(`${getCollectionPath(Collection.Name, Collection.Id)}`, stringify(Document)));
+export const updateDocument = asyncHandler(async (UserId, CollectionName, Document, replace = false) => {
+    let prev = await getDocument(UserId, CollectionName);
+    if (!prev.find((item) => item.Id === Document.Id)) throw new Error(`There is no Document with Id ${Document.Id}`);
+
+    await prev.map((doc) => {
+        if (doc.Id === Document.Id) {
+            if (replace) {
+                doc.params = Document.params;
+            } else {
+                doc.params = { ...doc.params, ...Document.params };
+            }
+        }
+    });
+
+    await fs.writeFile(getDocumentPath(UserId, CollectionName), stringify(prev));
 });
 
+export const deleteDocument = asyncHandler(async (UserId, CollectionName, DocumentId) => {
+    let prev = await getDocument(UserId, CollectionName);
+    if (!prev.find((item) => item.Id === DocumentId)) throw new Error(`There is no Document with Id ${DocumentId}`);
+    prev = await prev.filter((doc) => doc.Id !== DocumentId);
+
+    await fs.writeFile(getDocumentPath(UserId, CollectionName), stringify(prev));
+});
