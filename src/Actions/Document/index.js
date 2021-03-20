@@ -40,10 +40,10 @@ export const updateDocument = asyncHandler(async (UserId, CollectionName, Docume
     await fs.writeFile(getDocumentPath(UserId, CollectionName), stringify(prev));
 });
 
-export const deleteDocument = asyncHandler(async (UserId, CollectionName, DocumentId) => {
-    let prev = await getDocument(UserId, CollectionName);
-    if (!prev.find((item) => item.Id === DocumentId)) throw new Error(`There is no Document with Id ${DocumentId}`);
-    prev = await prev.filter((doc) => doc.Id !== DocumentId);
-
-    await fs.writeFile(getDocumentPath(UserId, CollectionName), stringify(prev));
+export const deleteDocument = asyncHandler(async (UserId, CollectionName, filter) => {
+    let data = await getDocument(UserId, CollectionName);
+    const filtered = await data.filter(filter(false));
+    const deleted = await data.filter(filter());
+    await fs.writeFile(getDocumentPath(UserId, CollectionName), stringify(filtered));
+    return deleted;
 });
