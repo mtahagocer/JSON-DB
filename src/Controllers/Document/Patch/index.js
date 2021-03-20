@@ -10,7 +10,7 @@ export default asyncHandler(async (req, res) => {
     if (!Patch) throw new CustomError('"Patch" is required');
     if (!Object.keys(Patch).length) throw new CustomError('"Patch" must be a object');
 
-    const _document = new BaseDocument({ CollectionName, Patch });
+    const _document = new BaseDocument(CollectionName, Patch);
 
     const filter = filterByPatch(Patch, DeepEquality);
     const _data = await _document.Get(id, filter);

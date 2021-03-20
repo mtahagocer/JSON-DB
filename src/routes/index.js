@@ -1,11 +1,13 @@
 import { Router } from 'express';
 import listEndpoints from 'express-list-endpoints';
-import * as CollectionController from '../Controllers/Collection';
+import CollectionRouter from './Collection';
+import DocumentRouter from './Document';
+
 const router = Router();
 
-router.get('/collection', CollectionController.Get);
-router.post('/collection', CollectionController.Post);
-router.delete('/collection', CollectionController.Delete);
+router.all('/collection', CollectionRouter);
+
+router.all('/document', DocumentRouter);
 
 router.all('*', (req, res) => {
     let endpoints = listEndpoints(router);
