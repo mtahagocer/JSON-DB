@@ -4,12 +4,13 @@ import asyncHandler from 'express-async-handler';
 
 export default asyncHandler(async (req, res) => {
     const { user } = req;
-    const { Name = new CustomError('Collection "Name" is required') } = req.body;
-    const _collection = new BaseCollection({ Name, UserId: user.id });
+    const { CollectionName } = req.body;
+    if (!CollectionName) throw new CustomError('Collection "Name" is required');
+    const _collection = new BaseCollection({ Name: CollectionName, UserId: user.id });
     await _collection.SaveCollection();
     res.json({
         success: true,
-        message: 'Collection created successfully',
+        message: `ÏCollection ${CollectionName} created successfully`,
         Collection: _collection
     });
 });

@@ -20,6 +20,6 @@ export default asyncHandler(async (req, res) => {
         success: true,
         DocumentCount: _data.length,
         message: 'Document patch successfully',
-        Document: _data
+        Documents: _data
     });
 });

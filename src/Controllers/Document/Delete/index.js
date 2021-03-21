@@ -26,6 +26,6 @@ export default asyncHandler(async (req, res) => {
         success: true,
         DocumentCount: _data.length,
         message: _data.length ? 'Documents deleted successfully' : 'Can not find any documents with this conditions',
-        Document: _data
+        Documents: _data
     });
 });

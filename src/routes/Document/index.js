@@ -3,10 +3,10 @@ import * as DocumentController from '../../Controllers/Document';
 
 const router = Router();
 
-router.get('/document', DocumentController.Get);
-router.put('/document', DocumentController.Put);
-router.patch('/document', DocumentController.Patch);
-router.post('/document', DocumentController.Post);
-router.delete('/document', DocumentController.Delete);
+router.get('/', DocumentController.Get);
+router.put('/', DocumentController.Put);
+router.patch('/', DocumentController.Patch);
+router.post('/', DocumentController.Post);
+router.delete('/', DocumentController.Delete);
 
 export default router;

@@ -5,19 +5,20 @@ import DocumentRouter from './Document';
 
 const router = Router();
 
-router.all('/collection', CollectionRouter);
 
-router.all('/document', DocumentRouter);
+router.use('/document', DocumentRouter);
+
+router.use('/collection', CollectionRouter);
 
 router.all('*', (req, res) => {
     let endpoints = listEndpoints(router);
-    endpoints.splice(0, 1);
+    endpoints.pop();
     res.json({
         success: false,
         error: [
             'Invalid route'
         ],
-        routes: JSON.stringify(endpoints)
+        routes: endpoints
     });
 });
 
