@@ -7,11 +7,13 @@ export default asyncHandler(async (req, res) => {
     const { User: { Id } } = req;
     const { CollectionName, Patch, DeepEquality = false, KeyList, ValueList, Strict = true } = req.body;
 
-    if ((!Patch && ((!KeyList && ValueList) || (KeyList && !ValueList))) || (Patch && (KeyList || ValueList))) throw new CustomError(' "Patch" OR "KeyList and ValueList" is required');
+    // #region conditions
+    if ((!Patch && ((!KeyList && ValueList) || (KeyList && !ValueList))) || (Patch && (KeyList || ValueList)) || (!Patch && !KeyList && !ValueList)) throw new CustomError(' "Patch" OR "KeyList and ValueList" is required');
     if (Strict !== undefined && typeof Strict !== 'boolean') throw new CustomError('"Strict" must be a boolean');
     if (Patch && !Object.keys(Patch).length) throw new CustomError('"Patch" must be a object');
     if ((KeyList && !Array.isArray(KeyList)) || (ValueList && !Array.isArray(ValueList))) throw new CustomError('"KeyList" and "ValueList" must be a array');
     if (KeyList && KeyList.some((item) => typeof item !== 'string')) throw new CustomError('"KeyList items" must be a string object key.');
+    // #endregion
 
     const filter = Patch ? filterByPatch(Patch, DeepEquality) : filterByKeyAndValue(KeyList, ValueList)(Strict);
     const _data = await new BaseCollection({ UserId: Id, Name: CollectionName }).GetDocument(filter);

@@ -3,7 +3,7 @@ import 'dotenv/config';
 
 const jwtMV = expressJwt({
     secret: process.env.JWT_SECRET,
-    algorithms: ['HS256']
+    algorithms: [process.env.JWT_ALGORITHM]
 }).unless({ path: ['/api/login', '/api/routes'] });
 
 export default jwtMV;

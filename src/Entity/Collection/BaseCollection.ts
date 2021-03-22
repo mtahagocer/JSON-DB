@@ -1,5 +1,6 @@
 import * as CollectionActions from '../../Actions/Collection';
 import CustomError from '../CustomError';
+import BaseDocument from '../Document/BaseDocument';
 
 export default class BaseCollection {
     private Name: string;
@@ -16,22 +17,44 @@ export default class BaseCollection {
         this.UserId = UserId;
     }
 
+    // #region collection
+
     Get = async (): Promise<BaseCollection> => {
         return await CollectionActions.getCollection({ ...this });
     }
 
-    SaveCollection = async () => {
+    Save = async () => {
         this.CreationDate = new Date(Date.now());
         await CollectionActions.createCollection({ ...this });
     }
 
     Update = async (Params: BaseCollection) => {
         this.UpdateDate = new Date(Date.now());
-        await CollectionActions.updateCollection(Params);
+        return await CollectionActions.updateCollection(Params);
     }
 
     Delete = async (force) => {
         await CollectionActions.deleteCollection({ ...this }, force);
     }
 
+    // #endregion
+
+    // #region document
+    GetDocument = async (filter?: Function) => {
+        return await BaseDocument.Get(this.UserId, this.Name, filter);
+    }
+
+    SaveDocument = async (Params: Object) => {
+        return await BaseDocument.Save(this.UserId, this.Name, Params);
+    }
+
+    UpdateDocument = async (DocumentId: string, replace?: boolean) => {
+        return await BaseDocument.Update(this.UserId, this.Name, DocumentId, replace);
+    }
+
+    DeleteDocument = async (filter: Function) => {
+        return await BaseDocument.Delete(this.UserId, this.Name, filter);
+    }
+
+    // #endregion
 }

@@ -3,39 +3,34 @@ import * as Helpers from '../../Helpers';
 import CustomError from '../CustomError';
 
 export default class BaseDocument {
-    Id: string;
-    CollectionName: string;
-    CreationDate: Date;
-    UpdateDate: Date;
-    Params: Object = {};
+    static _Id: string;
+    static CreationDate: Date;
+    static UpdateDate: Date;
+    static Params: Object;
 
-    constructor(CollectionName: string, Params: Object) {
-        if (!CollectionName) throw new CustomError('Collection Name is required');
-        this.CollectionName = CollectionName;
-        if (Params) {
-            if (!Object.keys(Params).length) throw new CustomError('"Params" must be a object');
-            this.Params = Params;
-        }
+    get Params(): Object {
+        return BaseDocument.Params;
     }
 
-    Get = async (UserId: string, filter: Function) => {
-        return await DocumentActions.getDocument(UserId, this.CollectionName, filter);
+    static Get = async (UserId: string, CollectionName: string, filter: Function) => {
+        return await DocumentActions.getDocument(UserId, CollectionName, filter);
     }
 
-    SaveDocument = async (UserId: string) => {
-        this.CreationDate = new Date(Date.now());
-        this.Id = Helpers.generateId();
-        return await DocumentActions.createDocument(UserId, this.CollectionName, { ...this });
+    static Save = async (UserId: string, CollectionName: string, Params: Object) => {
+        if (!Object.keys(Params).length) throw new CustomError('"Params" must be a object');
+        BaseDocument.CreationDate = new Date(Date.now());
+        BaseDocument._Id = Helpers.generateId();
+        return await DocumentActions.createDocument(UserId, CollectionName, { ...BaseDocument.Params, ...BaseDocument });
     }
 
-    Update = async (UserId: string, Id: string, replace: boolean) => {
-        if (!Id) throw new CustomError('Document Id is required');
-        this.UpdateDate = new Date(Date.now());
-        return await DocumentActions.updateDocument(UserId, this.CollectionName, { ...this }, replace);
+    static Update = async (UserId: string, CollectionName: string, _Id: string, replace: boolean) => {
+        if (!_Id) throw new CustomError('Document _Id is required');
+        BaseDocument.UpdateDate = new Date(Date.now());
+        return await DocumentActions.updateDocument(UserId, CollectionName, { ...BaseDocument }, replace);
     }
 
-    Delete = async (UserId: string, filter: Function) => {
-        return await DocumentActions.deleteDocument(UserId, this.CollectionName, filter);
+    static Delete = async (UserId: string, CollectionName: string, filter: Function) => {
+        return await DocumentActions.deleteDocument(UserId, CollectionName, filter);
     }
 
 }
