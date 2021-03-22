@@ -4,7 +4,7 @@ import asyncHandler from 'express-async-handler';
 import { filterByPatch } from '../../../Helpers';
 
 export default asyncHandler(async (req, res) => {
-    const { user: { id } } = req;
+    const { User: { Id } } = req;
     const { Patch, CollectionName, DeepEquality = false } = req.body;
 
     if (!Patch) throw new CustomError('"Patch" is required');
@@ -13,7 +13,7 @@ export default asyncHandler(async (req, res) => {
     const _document = new BaseDocument(CollectionName, Patch);
 
     const filter = filterByPatch(Patch, DeepEquality);
-    const _data = await _document.Get(id, filter);
+    const _data = await _document.Get(Id, filter);
     const status = _data.length > 0 ? 200 : 404;
 
     res.status(status).json({
