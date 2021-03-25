@@ -4,13 +4,13 @@ import asyncHandler from 'express-async-handler';
 
 export default asyncHandler(async (req, res) => {
     const { User: { Id } } = req;
-    const { CollectionName, Params } = req.body;
+    const { CollectionName, Document } = req.body;
 
-    if (!Params) throw new CustomError('"Params" is required');
+    if (!Document) throw new CustomError('"Document" is required');
 
     const _collection = new BaseCollection({ UserId: Id, Name: CollectionName });
 
-    const _saved = await _collection.SaveDocument(Params);
+    const _saved = await _collection.SaveDocument(Document);
 
     await _collection.Update(await _collection.Get().then((response) => {
         response.DocumentCount += 1;

@@ -44,12 +44,12 @@ export default class BaseCollection {
         return await BaseDocument.Get(this.UserId, this.Name, filter);
     }
 
-    SaveDocument = async (Params: Object) => {
-        return await BaseDocument.Save(this.UserId, this.Name, Params);
+    SaveDocument = async (Document: Object) => {
+        return await BaseDocument.Save(this.UserId, this.Name, Document);
     }
 
-    UpdateDocument = async (DocumentId: string, replace?: boolean) => {
-        return await BaseDocument.Update(this.UserId, this.Name, DocumentId, replace);
+    UpdateDocument = async (Document) => {
+        return await BaseDocument.Update(this.UserId, this.Name, Document);
     }
 
     DeleteDocument = async (filter: Function) => {

@@ -4,29 +4,25 @@ import CustomError from '../CustomError';
 
 export default class BaseDocument {
     static _Id: string;
-    static CreationDate: Date;
-    static UpdateDate: Date;
-    static Params: Object;
-
-    get Params(): Object {
-        return BaseDocument.Params;
-    }
+    static _CreationDate: Date;
+    static _UpdateDate: Date;
+    static Data: Object;
 
     static Get = async (UserId: string, CollectionName: string, filter: Function) => {
         return await DocumentActions.getDocument(UserId, CollectionName, filter);
     }
 
-    static Save = async (UserId: string, CollectionName: string, Params: Object) => {
-        if (!Object.keys(Params).length) throw new CustomError('"Params" must be a object');
-        BaseDocument.CreationDate = new Date(Date.now());
+    static Save = async (UserId: string, CollectionName: string, Data: Object) => {
+        if (!Object.keys(Data).length) throw new CustomError('"Data" must be a object');
+        BaseDocument.Data = Data;
+        BaseDocument._CreationDate = new Date(Date.now());
         BaseDocument._Id = Helpers.generateId();
-        return await DocumentActions.createDocument(UserId, CollectionName, { ...BaseDocument.Params, ...BaseDocument });
+        return await DocumentActions.createDocument(UserId, CollectionName, { ...BaseDocument });
     }
 
-    static Update = async (UserId: string, CollectionName: string, _Id: string, replace: boolean) => {
-        if (!_Id) throw new CustomError('Document _Id is required');
-        BaseDocument.UpdateDate = new Date(Date.now());
-        return await DocumentActions.updateDocument(UserId, CollectionName, { ...BaseDocument }, replace);
+    static Update = async (UserId: string, CollectionName: string, Document) => {
+        if (!Document._Id) throw new CustomError('Document _Id is required');
+        return await DocumentActions.updateDocument(UserId, CollectionName, { ...Document, _UpdatedDate: new Date(Date.now()) });
     }
 
     static Delete = async (UserId: string, CollectionName: string, filter: Function) => {

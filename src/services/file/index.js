@@ -15,17 +15,15 @@ class File {
         }
     }
 
-    static async readFile(sourcePath) {
+    static readFile(sourcePath) {
         const directory = this.resolveBasePath(sourcePath);
 
         return new Promise((resolve, reject) => {
-            (async () => {
-                await fs.readFile(directory, (err, readedData) => {
-                    // throw new CustomError(err.message);
-                    if (err) reject(err);
-                    resolve(JSON.parse(readedData));
-                });
-            })();
+            fs.readFile(directory, (err, readedData) => {
+                // throw new CustomError(err.message);
+                if (err) reject(err);
+                resolve(JSON.parse(readedData));
+            });
         });
     }
 
@@ -37,29 +35,6 @@ class File {
     static async copyFile(source, destination) {
         await this.checkDirectory(destination);
         await fs.copyFile(this.resolveBasePath(source), this.resolveBasePath(destination));
-    }
-
-    static async replaceInFile(sourcePath, destinationPath, replacements = []) {
-        await this.checkDirectory(destinationPath);
-        let file = fs.readFileSync(this.resolveBasePath(sourcePath), 'utf8');
-
-        replacements.forEach(({ oldContent, newContent }) => {
-            file = file.replace(oldContent, newContent);
-        });
-        return fs.writeFile(this.resolveBasePath(destinationPath), file, (err) => {
-            if (err) throw err;
-        });
-    }
-
-    static async applyPatch(sourcePath, params) {
-        const { pattern, patch } = params;
-
-        if (!await this.readFile(this.resolveBasePath(sourcePath)).includes(patch)) {
-            await fs.writeFile(
-                this.resolveBasePath(sourcePath),
-                fs.readFileSync(sourcePath, 'utf8').replace(pattern, (match) => `${match}${patch}`)
-            );
-        }
     }
 
     static async writeFile(filePath, content) {

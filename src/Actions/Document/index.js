@@ -23,27 +23,30 @@ export const createDocument = asyncHandler(async (UserId, CollectionName, Docume
     return Document;
 });
 
-export const updateDocument = asyncHandler(async (UserId, CollectionName, Document, replace = false) => {
+export const updateDocument = asyncHandler(async (UserId, CollectionName, Document) => {
     let prev = await getDocument(UserId, CollectionName);
-    if (!prev.find((item) => item.Id === Document.Id)) throw new Error(`There is no Document with Id ${Document.Id}`);
+    let _updated;
+    if (!prev.find((item) => item._Id === Document._Id)) throw new Error(`There is no Document with Id ${Document._Id}`);
 
     await prev.map((doc) => {
-        if (doc.Id === Document.Id) {
-            if (replace) {
-                doc.params = Document.params;
-            } else {
-                doc.params = { ...doc.params, ...Document.params };
-            }
+        if (doc._Id === Document._Id) {
+            doc._UpdatedDate = Document._UpdatedDate;
+            delete Document._Id;
+            delete Document._UpdatedDate;
+            doc.Data = { ...doc.data, ...Document };
+            _updated = { ...doc };
         }
     });
 
     await fs.writeFile(getDocumentPath(UserId, CollectionName), stringify(prev));
+    return _updated;
 });
 
 export const deleteDocument = asyncHandler(async (UserId, CollectionName, filter) => {
     let data = await getDocument(UserId, CollectionName);
-    const filtered = await data.filter(filter(false));
-    const deleted = await data.filter(filter());
+    const dataLength = data.length;
+    const filtered = await data.filter(filter);
     await fs.writeFile(getDocumentPath(UserId, CollectionName), stringify(filtered));
-    return deleted;
+
+    return dataLength - filtered.length;
 });
