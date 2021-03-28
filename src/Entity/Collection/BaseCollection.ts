@@ -1,4 +1,4 @@
-import * as CollectionActions from '../../Actions/Collection';
+import * as CollectionActions from '../../Business/Collection';
 import CustomError from '../CustomError';
 import BaseDocument from '../Document/BaseDocument';
 
@@ -19,13 +19,13 @@ export default class BaseCollection {
 
     // #region collection
 
-    Get = async (): Promise<BaseCollection> => {
-        return await CollectionActions.getCollection({ ...this });
-    }
-
     Save = async () => {
         this.CreationDate = new Date(Date.now());
         await CollectionActions.createCollection({ ...this });
+    }
+
+    Get = async (): Promise<BaseCollection> => {
+        return await CollectionActions.getCollection({ ...this });
     }
 
     Update = async (Params: BaseCollection) => {
@@ -40,16 +40,17 @@ export default class BaseCollection {
     // #endregion
 
     // #region document
-    GetDocument = async (filter?: Function) => {
-        return await BaseDocument.Get(this.UserId, this.Name, filter);
-    }
 
     SaveDocument = async (Document: Object) => {
         return await BaseDocument.Save(this.UserId, this.Name, Document);
     }
 
-    UpdateDocument = async (Document) => {
-        return await BaseDocument.Update(this.UserId, this.Name, Document);
+    GetDocument = async (filter?: Function) => {
+        return await BaseDocument.Get(this.UserId, this.Name, filter);
+    }
+
+    UpdateDocument = async (Document: BaseDocument, Replace: Boolean) => {
+        return await BaseDocument.Update(this.UserId, this.Name, Document, Replace);
     }
 
     DeleteDocument = async (filter: Function) => {
