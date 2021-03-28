@@ -28,25 +28,6 @@ export const stringify = (data) => JSON.stringify(data, null, isProduction ? 0 :
 
 export const dbPath = (path) => `${Paths.db}/${path}`;
 
-export const deepEqual = (x, y) => {
-    const keys = Object.keys, tx = typeof x, ty = typeof y;
-    return x && y && tx === 'object' && tx === ty ? (
-        keys(x).length === keys(y).length && keys(x).every((key) =>
-            deepEqual(x[key], y[key]))
-    ) : (x === y);
-};
-
-export const someEqual = (x, y, excludeKeyList = []) => {
-    const keys = Object.keys, tx = typeof x, ty = typeof y;
-    return x && y && tx === 'object' && tx === ty ? (
-        keys(x).some((key) => excludeKeyList.indexOf(key) === -1 && deepEqual(x[key], y[key]))
-    ) : (() => {
-        // x === y && console.log({ x, y });
-        return x === y;
-    })();
-};
-
-
 export const filterByPatch = (Patch, DeepEquality) => (dbData) => {
 
     const keys = Object.keys;
@@ -65,6 +46,24 @@ export const filterByPatch = (Patch, DeepEquality) => (dbData) => {
 
     });
     return isMatch;
+};
+
+export const deepEqual = (x, y) => {
+    const keys = Object.keys, tx = typeof x, ty = typeof y;
+    return x && y && tx === 'object' && tx === ty ? (
+        keys(x).length === keys(y).length && keys(x).every((key) =>
+            deepEqual(x[key], y[key]))
+    ) : (x === y);
+};
+
+export const someEqual = (x, y, excludeKeyList = []) => {
+    const keys = Object.keys, tx = typeof x, ty = typeof y;
+    return x && y && tx === 'object' && tx === ty ? (
+        keys(x).some((key) => excludeKeyList.indexOf(key) === -1 && deepEqual(x[key], y[key]))
+    ) : (() => {
+        // x === y && console.log({ x, y });
+        return x === y;
+    })();
 };
 
 export const filterByKeyAndValue = (KeyList, ValueList) => (strict = true) => (dbData) => {

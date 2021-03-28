@@ -1,7 +1,6 @@
 import BaseCollection from '../../../Entity/Collection/BaseCollection';
-import CustomError from '../../../Entity/CustomError';
 import asyncHandler from 'express-async-handler';
-import { filterByPatch, filterByKeyAndValue } from '../../../Helpers';
+import { handleFilterAlgorithm } from '../../../Business/Document';
 
 export default asyncHandler(async (req, res) => {
     const { User: { Id } } = req;
@@ -9,23 +8,21 @@ export default asyncHandler(async (req, res) => {
         {
             CollectionName,
             Patch,
-            DeepEquality = false,
+            SearchType,
             KeyList,
             ValueList,
             Strict = true
         } = req.body;
 
-    // #region conditions
-    if ((!Patch && ((!KeyList && ValueList) || (KeyList && !ValueList))) || (Patch && (KeyList || ValueList)) || (!Patch && !KeyList && !ValueList)) throw new CustomError(' "Patch" OR "KeyList and ValueList" is required');
-    if (Strict !== undefined && typeof Strict !== 'boolean') throw new CustomError('"Strict" must be a boolean');
-    if (Patch && !Object.keys(Patch).length) throw new CustomError('"Patch" must be a object');
-    if ((KeyList && !Array.isArray(KeyList)) || (ValueList && !Array.isArray(ValueList))) throw new CustomError('"KeyList" and "ValueList" must be a array');
-    if (KeyList && KeyList.some((item) => typeof item !== 'string')) throw new CustomError('"KeyList items" must be a string object key.');
-    // #endregion
 
-    const filter = Patch ? filterByPatch(Patch, DeepEquality) : filterByKeyAndValue(KeyList, ValueList)(Strict);
     const _collection = new BaseCollection({ UserId: Id, Name: CollectionName });
-    const _deletedCount = await _collection.DeleteDocument(filter);
+    const _deletedCount = await _collection.DeleteDocument(handleFilterAlgorithm(
+        SearchType,
+        Patch,
+        Strict,
+        KeyList,
+        ValueList
+    ));
     const status = _deletedCount > 0 ? 200 : 404;
 
     await _collection.Update(await _collection.Get().then((response) => {

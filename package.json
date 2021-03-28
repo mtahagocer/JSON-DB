@@ -27,6 +27,7 @@
     "express-list-endpoints": "^5.0.0",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
+    "node-minify": "^3.6.0",
     "npm-run-all": "^4.1.5",
     "rimraf": "^3.0.2",
     "uuid": "^8.3.2"
@@ -39,6 +40,9 @@
     "plugins": [
       "@babel/plugin-proposal-class-properties",
       "@babel/plugin-proposal-object-rest-spread",
+      "@babel/plugin-syntax-dynamic-import",
+      "@babel/plugin-syntax-import-meta",
+      "@babel/plugin-proposal-json-strings",
       [
         "@babel/plugin-transform-runtime",
         {
@@ -54,8 +58,7 @@
     ],
     "ignore": [
       "**/__tests__/**",
-      "*.test.js",
-      "*.spec.js"
+      "*.test.js"
     ]
   },
   "jest": {
@@ -64,6 +67,7 @@
   "devDependencies": {
     "@babel/cli": "^7.13.10",
     "@babel/core": "^7.13.10",
+    "@types/jsonwebtoken": "^8.5.1",
     "@typescript-eslint/eslint-plugin": "4.0.1",
     "@typescript-eslint/parser": "4.0.1",
     "babel-eslint": "^10.0.1",

@@ -49,7 +49,7 @@ export default class BaseCollection {
         return await BaseDocument.Get(this.UserId, this.Name, filter);
     }
 
-    UpdateDocument = async (Document: BaseDocument, Replace: Boolean) => {
+    UpdateDocument = async (Document: BaseDocument, Replace: boolean) => {
         return await BaseDocument.Update(this.UserId, this.Name, Document, Replace);
     }
 
