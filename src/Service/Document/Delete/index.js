@@ -5,7 +5,15 @@ import { filterByPatch, filterByKeyAndValue } from '../../../Helpers';
 
 export default asyncHandler(async (req, res) => {
     const { User: { Id } } = req;
-    const { CollectionName, Patch, DeepEquality = false, KeyList, ValueList, Strict = true } = req.body;
+    const
+        {
+            CollectionName,
+            Patch,
+            DeepEquality = false,
+            KeyList,
+            ValueList,
+            Strict = true
+        } = req.body;
 
     // #region conditions
     if ((!Patch && ((!KeyList && ValueList) || (KeyList && !ValueList))) || (Patch && (KeyList || ValueList)) || (!Patch && !KeyList && !ValueList)) throw new CustomError(' "Patch" OR "KeyList and ValueList" is required');

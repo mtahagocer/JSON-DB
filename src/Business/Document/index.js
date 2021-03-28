@@ -1,4 +1,4 @@
-import fs from '../../Services/File';
+import fs from '../../Service/File';
 import { getCollectionPath, controlCollection } from '../Collection';
 import { stringify } from '../../Helpers';
 
