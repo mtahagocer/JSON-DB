@@ -1,11 +1,11 @@
-import fs from '../../Services/File';
+import fs from '../../Service/File';
 import CustomError from '../../Entity/CustomError';
 import { dbPath, stringify } from '../../Helpers';
 
 export const getCollectionPath = (UserId, Name) => dbPath(`${UserId}/${Name}`);
 
 export const controlCollection = async (UserId, CollectionName) => {
-    if (await !fs.isExist(getCollectionPath(UserId, CollectionName))) throw new CustomError(`There is not any Collection with Name = ${CollectionName}`);
+    if (!fs.isExist(getCollectionPath(UserId, CollectionName))) throw new CustomError(`There is not any Collection with Name = ${CollectionName}`);
     return true;
 };
 
