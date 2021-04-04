@@ -2,7 +2,9 @@ import * as DocumentActions from '../../Business/Document';
 import * as Helpers from '../../Helpers';
 import CustomError from '../CustomError';
 
-export default class BaseDocument {
+export default class BaseDocument { 
+    // TODO: process test for new embeded user
+    // TODO: delete process for bigdata
     static _Id: string;
     static _CreationDate: Date;
     static _UpdateDate: Date;

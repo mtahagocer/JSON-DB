@@ -1,6 +1,6 @@
-import BaseCollection from '../../../Entity/Collection/BaseCollection';
+import BaseCollection from '../../Entity/Collection/BaseCollection';
 import asyncHandler from 'express-async-handler';
-import CustomError from '../../../Entity/CustomError';
+import CustomError from '../../Entity/CustomError';
 
 export default asyncHandler(async (req, res) => {
     const { User: { Id } } = req;

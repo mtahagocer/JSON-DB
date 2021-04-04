@@ -1,4 +1,4 @@
-import BaseCollection from '../../../Entity/Collection/BaseCollection';
+import BaseCollection from '../../Entity/Collection/BaseCollection';
 import asyncHandler from 'express-async-handler';
 
 export default asyncHandler(async (req, res) => {

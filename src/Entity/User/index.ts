@@ -2,7 +2,9 @@ import * as UserActions from '../../Business/User';
 import * as Helpers from '../../Helpers';
 import CustomError from '../CustomError';
 
-export default class DBUser { // TODO: embed other class functions to here
+export default class DBUser { 
+    // TODO: process test for new embeded user
+    // TODO: embed other class functions to here
     _Id: string;
     _CreationDate: Date;
     _UpdatedDate: Date;

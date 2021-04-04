@@ -2,7 +2,10 @@ import * as CollectionActions from '../../Business/Collection';
 import CustomError from '../CustomError';
 import BaseDocument from '../Document/BaseDocument';
 
-export default class BaseCollection { // TODO: export default new instance
+export default class BaseCollection {
+    // TODO: process test for new embeded user
+    // TODO: export default new instance
+    // TODO: deleete process for bigdata
     private Name: string;
     DocumentCount: number = 0;
 

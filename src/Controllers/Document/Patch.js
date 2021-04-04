@@ -1,6 +1,6 @@
-import BaseCollection from '../../../Entity/Collection/BaseCollection';
+import BaseCollection from '../../Entity/Collection/BaseCollection';
 import asyncHandler from 'express-async-handler';
-import { handleFilterAlgorithm } from '../../../Business/Document';
+import { handleFilterAlgorithm } from '../../Business/Document';
 
 export default asyncHandler(async (req, res) => {
     const { User: { Id } } = req;
