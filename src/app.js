@@ -10,9 +10,9 @@ import asyncHandler from 'express-async-handler';
 
 dotenv.config();
 const app = express();
-app.use(loggerMV);
+app.use(loggerMV); // TODO: middleware list push on one
 app.use(jwtMV);
-app.use(userMV);
+app.use(asyncHandler(userMV));
 app.use(express.json());
 // app.use(express.urlencoded({ extended: false }));
 // app.use(cookieParser());
