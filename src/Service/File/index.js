@@ -1,12 +1,20 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import asyncHandler from 'express-async-handler';
+import { stringify } from '../../Helpers';
 class File {
     static resolveBasePath = (destinationPath) => path.join(__dirname, '../../../', destinationPath)
 
     static isExist(sourcePath) {
         return fs.existsSync(sourcePath);
     }
+
+    static checkFile = asyncHandler(async (sourcePath, defaultValue = {}) => {
+        const directory = this.resolveBasePath(sourcePath);
+        if (!this.isExist(directory)) {
+            await this.writeFile(sourcePath, stringify(defaultValue));
+        }
+    })
 
     static checkDirectory = asyncHandler(async (sourcePath) => {
         const directory = this.resolveBasePath(sourcePath);
