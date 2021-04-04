@@ -5,7 +5,7 @@ import { dbPath, stringify } from '../../Helpers';
 export const getCollectionPath = (UserId, Name) => dbPath(`${UserId}/${Name}`);
 
 export const controlCollection = async (UserId, CollectionName) => {
-    if (!fs.isExist(getCollectionPath(UserId, CollectionName))) throw new CustomError(`There is not any Collection with Name = ${CollectionName}`);
+    if (!fs.isExist(getCollectionPath(UserId, CollectionName))) throw new CustomError(`There is not any Collection with Name = ${CollectionName}`, 404);
     return true;
 };
 

@@ -31,7 +31,7 @@ export const createUser = async (User) => {
 export const updateUser = async (User) => {
     const _users = await getUsers();
     const userIndex = await _users.findIndex((user) => user._Id === User._Id);
-    if (userIndex === -1) throw new CustomError(`There is not any user with ${User._Id} Id.`);
+    if (userIndex === -1) throw new CustomError(`There is not any user with ${User._Id} Id.`, 404);
 
     const options = { min: 5, max: 8 };
     if (!validator.isLength(User.Password, options)) throw new CustomError(`New password must be ${stringify(options)}`);
@@ -49,7 +49,7 @@ export const updateUser = async (User) => {
 export const deleteUser = async (User, force) => {
     const _users = await getUsers();
     const userIndex = await _users.findIndex((user) => user._Id === User._Id);
-    if (userIndex === -1) throw new CustomError(`There is not any user with ${User._Id} Id.`);
+    if (userIndex === -1) throw new CustomError(`There is not any user with ${User._Id} Id.`, 404);
 
     if (!force) throw new CustomError('Force must be a true for delete this user');
 

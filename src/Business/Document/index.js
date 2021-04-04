@@ -30,7 +30,7 @@ export const updateDocument = async (UserId, CollectionName, Document, Replace =
     let prev = await getDocument(UserId, CollectionName);
     const docIndex = await prev.findIndex((user) => user._Id === Document._Id);
 
-    if (docIndex === -1) throw new Error(`There is no Document with Id ${Document._Id}`);
+    if (docIndex === -1) throw new Error(`There is no Document with Id ${Document._Id}`, 404);
 
     if (Replace) {
         prev[docIndex] = {
