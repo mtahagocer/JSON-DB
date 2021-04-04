@@ -2,7 +2,7 @@ import * as CollectionActions from '../../Business/Collection';
 import CustomError from '../CustomError';
 import BaseDocument from '../Document/BaseDocument';
 
-export default class BaseCollection {
+export default class BaseCollection { // TODO: export default new instance
     private Name: string;
     DocumentCount: number = 0;
 
