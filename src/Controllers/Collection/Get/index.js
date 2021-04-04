@@ -11,8 +11,8 @@ export default asyncHandler(async (req, res) => {
     const _data = await _collection.Get();
 
     res.json({
-        success: true,
-        message: `Collection ${CollectionName} readed successfully`,
+        Success: true,
+        Message: `Collection ${CollectionName} readed Successfully`,
         Collection: _data
     });
 });

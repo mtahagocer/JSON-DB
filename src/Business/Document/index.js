@@ -58,8 +58,8 @@ export const deleteDocument = async (UserId, CollectionName, filter) => {
     return dataLength - filtered.length;
 };
 
-export const handleFilterAlgorithm = (SearchType, Patch, Strict, KeyList, ValueList) => {
-
+export const handleFilterAlgorithm = ({ SearchType, Patch, Strict, KeyList, ValueList }) => {
+    // TODO: control patch for delete  
     switch (SearchType) {
 
         case SearchTypes[0]: {

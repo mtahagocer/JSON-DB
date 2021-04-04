@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import * as DocumentController from '../../Service/Document';
+import * as DocumentController from '../../Controllers/Document';
 
 const router = Router();
 

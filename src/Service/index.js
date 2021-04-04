@@ -1,5 +1,4 @@
-import Collection from './Collection';
+import File from './File';
+import Singleton from './Singleton';
 
-export {
-    Collection
-};
+export { File, Singleton };

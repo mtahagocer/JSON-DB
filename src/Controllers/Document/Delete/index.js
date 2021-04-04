@@ -16,13 +16,13 @@ export default asyncHandler(async (req, res) => {
 
 
     const _collection = new BaseCollection({ UserId: Id, Name: CollectionName });
-    const _deletedCount = await _collection.DeleteDocument(handleFilterAlgorithm(
+    const _deletedCount = await _collection.DeleteDocument(handleFilterAlgorithm({
         SearchType,
         Patch,
         Strict,
         KeyList,
         ValueList
-    ));
+    }));
     const status = _deletedCount > 0 ? 200 : 404;
 
     await _collection.Update(await _collection.Get().then((response) => {
@@ -31,8 +31,8 @@ export default asyncHandler(async (req, res) => {
     }));
 
     res.status(status).json({
-        success: true,
+        Success: true,
         DocumentCount: _deletedCount,
-        message: _deletedCount ? 'Documents deleted successfully' : 'Can not find any documents with this conditions'
+        Message: _deletedCount ? 'Documents deleted Successfully' : 'Can not find any documents with this conditions'
     });
 });

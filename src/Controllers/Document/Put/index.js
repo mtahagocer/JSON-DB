@@ -16,8 +16,8 @@ export default asyncHandler(async (req, res) => {
     const _document = await new BaseCollection({ UserId: Id, Name: CollectionName }).UpdateDocument(Document, Replace);
 
     res.json({
-        success: true,
-        message: 'Document updated successfully',
+        Success: true,
+        Message: 'Document updated Successfully',
         Document: _document
     });
 });

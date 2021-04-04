@@ -15,21 +15,21 @@ export default asyncHandler(async (req, res) => {
 
     let _data;
 
-    _data = await new BaseCollection({ UserId: Id, Name: CollectionName }).GetDocument(handleFilterAlgorithm(
+    _data = await new BaseCollection({ UserId: Id, Name: CollectionName }).GetDocument(handleFilterAlgorithm({
         SearchType,
         Patch,
         Strict,
         KeyList,
         ValueList
-    )
+    })
     );
 
     const status = _data.length > 0 ? 200 : 404;
 
     res.status(status).json({
-        success: true,
+        Success: true,
         DocumentCount: _data.length,
-        message: 'Document patch successfully',
+        Message: 'Document patch Successfully',
         Documents: _data
     });
 });

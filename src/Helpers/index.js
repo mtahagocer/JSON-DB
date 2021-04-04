@@ -2,29 +2,22 @@ import 'dotenv/config';
 import * as uuid from 'uuid';
 import Paths from '../Constants/Path';
 import Types from '../Constants/Type';
+import { isProduction } from '../Constants/Business';
 import CustomError from '../Entity/CustomError';
 import jwt from 'jsonwebtoken';
 
+// #region creating
 export const createToken = (data, expiresIn = process.env.JWT_EXPIRE_TIME) => new Promise((resolve, reject) => {
     jwt.sign(data, process.env.JWT_SECRET, {
         algorithm: process.env.JWT_ALGORITHM,
-        ...(expiresIn ? ({ expiresIn: expiresIn }) : {})
+        expiresIn
     }, (err, token) => {
-        if (err) return reject(err);
-        return resolve(token);
+        if (err) reject(err);
+        resolve(token);
     });
 });
 
-export const required = (message, status) => {
-    throw new CustomError(message, status);
-};
-
 export const generateId = () => uuid.v4();
-
-export const isProduction = process.env.NODE_ENV === 'production';
-
-export const stringify = (data) => JSON.stringify(data, null, isProduction ? 0 : 2);
-
 
 export const dbPath = (path) => `${Paths.db}/${path}`;
 
@@ -75,7 +68,19 @@ export const filterByKeyAndValue = (KeyList, ValueList) => (strict = true) => (d
     return isMatch;
 };
 
+// #endregion
+
+// #region validation
+
+export const required = (Message) => {
+    throw new CustomError(Message);
+};
+
 export const checkType = (data, type) => {
     if (!Types[type](data)) throw new CustomError(`For ${JSON.stringify(data)} expected type have to be ${type}!`);
     return true;
 };
+
+export const stringify = (data) => JSON.stringify(data, null, isProduction ? 0 : 2);
+
+// #endregion

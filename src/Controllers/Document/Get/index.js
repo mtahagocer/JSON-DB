@@ -8,9 +8,9 @@ export default asyncHandler(async (req, res) => {
     const _documents = await new BaseCollection({ UserId: Id, Name: CollectionName }).GetDocument();
 
     res.json({
-        success: true,
+        Success: true,
         DocumentCount: _documents.length,
-        message: 'Document readed successfully',
+        Message: 'Document readed Successfully',
         Documents: _documents
     });
 });

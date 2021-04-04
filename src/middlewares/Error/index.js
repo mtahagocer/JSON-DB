@@ -1,7 +1,7 @@
 export default function (err, req, res) {
     if (err.name === 'UnauthorizedError') {
         return res.status(401).json({
-            success: false,
+            Success: false,
             error: ['Invalid token']
         });
     }
@@ -9,8 +9,8 @@ export default function (err, req, res) {
     const { status, message } = err;
 
     return res.status(status).json({
-        success: false,
+        Success: false,
         status,
-        message,
+        Message: message,
     });
 }

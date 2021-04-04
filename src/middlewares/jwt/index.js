@@ -4,6 +4,6 @@ import 'dotenv/config';
 const jwtMV = expressJwt({
     secret: process.env.JWT_SECRET,
     algorithms: [process.env.JWT_ALGORITHM]
-}).unless({ path: ['/api/login', '/api/routes'] });
+}).unless({ path: ['/login', '/routes'] });
 
 export default jwtMV;
