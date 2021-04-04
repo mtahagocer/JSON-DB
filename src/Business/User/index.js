@@ -14,6 +14,8 @@ export const getUsers = async (filter) => {
         users = await users.filter(filter);
     }
 
+    users = await users.filter((user) => user.Blocked === false);
+
     return users;
 };
 
@@ -31,16 +33,28 @@ export const updateUser = async (User) => {
     const userIndex = await _users.findIndex((user) => user._Id === User._Id);
     if (userIndex === -1) throw new CustomError(`There is not any user with ${User._Id} Id.`);
 
-    _users[userIndex] = User;
+    const options = { min: 5, max: 8 };
+    if (!validator.isLength(User.Password, options)) throw new CustomError(`New password must be ${stringify(options)}`);
+
+    if (_users[userIndex].Password === User.Password) throw new CustomError('Old password can not be same with older');
+
+    _users[userIndex].Password = User.Password;
+    _users[userIndex]._UpdatedDate = User._UpdatedDate;
+
     await _writeUser(stringify([..._users]));
 
     return _users[userIndex];
 };
 
-export const deleteUser = async (Id) => {
+export const deleteUser = async (User, force) => {
     const _users = await getUsers();
-    const userIndex = await _users.findIndex((user) => user._Id === Id);
-    if (userIndex === -1) throw new CustomError(`There is not any user with ${Id} Id.`);
+    const userIndex = await _users.findIndex((user) => user._Id === User._Id);
+    if (userIndex === -1) throw new CustomError(`There is not any user with ${User._Id} Id.`);
+
+    if (!force) throw new CustomError('Force must be a true for delete this user');
+
+    _users[userIndex].Blocked = true;
+    _users[userIndex]._UpdatedDate = User._UpdatedDate;
 
     await _writeUser(stringify(_users));
 };
