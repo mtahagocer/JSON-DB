@@ -3,7 +3,7 @@ import asyncHandler from 'express-async-handler';
 import { handleFilterAlgorithm } from '../../Business/Document';
 
 export default asyncHandler(async (req, res) => {
-    const { User: { Id } } = req;
+    const { User: { _Id } } = req;
     const {
         SearchType,
         CollectionName,
@@ -15,7 +15,7 @@ export default asyncHandler(async (req, res) => {
 
     let _data;
 
-    _data = await new BaseCollection({ UserId: Id, Name: CollectionName }).GetDocument(handleFilterAlgorithm({
+    _data = await new BaseCollection({ UserId: _Id, Name: CollectionName }).GetDocument(handleFilterAlgorithm({
         SearchType,
         Patch,
         Strict,

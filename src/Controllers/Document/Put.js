@@ -3,7 +3,7 @@ import asyncHandler from 'express-async-handler';
 import CustomError from '../../Entity/CustomError';
 
 export default asyncHandler(async (req, res) => {
-    const { User: { Id } } = req;
+    const { User: { _Id } } = req;
     const {
         CollectionName,
         Document,
@@ -13,7 +13,7 @@ export default asyncHandler(async (req, res) => {
     if (!Document) throw new CustomError('Document is required');
     if (typeof Replace !== 'boolean') throw new CustomError('Replace is must be a boolean');
 
-    const _document = await new BaseCollection({ UserId: Id, Name: CollectionName }).UpdateDocument(Document, Replace);
+    const _document = await new BaseCollection({ UserId: _Id, Name: CollectionName }).UpdateDocument(Document, Replace);
 
     res.json({
         Success: true,

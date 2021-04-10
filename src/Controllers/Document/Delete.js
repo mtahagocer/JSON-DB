@@ -3,7 +3,7 @@ import asyncHandler from 'express-async-handler';
 import { handleFilterAlgorithm } from '../../Business/Document';
 
 export default asyncHandler(async (req, res) => {
-    const { User: { Id } } = req;
+    const { User: { _Id } } = req;
     const
         {
             CollectionName,
@@ -15,7 +15,7 @@ export default asyncHandler(async (req, res) => {
         } = req.body;
 
 
-    const _collection = new BaseCollection({ UserId: Id, Name: CollectionName });
+    const _collection = new BaseCollection({ UserId: _Id, Name: CollectionName });
     const _deletedCount = await _collection.DeleteDocument(handleFilterAlgorithm({
         SearchType,
         Patch,

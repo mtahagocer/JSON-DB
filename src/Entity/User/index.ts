@@ -2,7 +2,7 @@ import * as UserActions from '../../Business/User';
 import * as Helpers from '../../Helpers';
 import CustomError from '../CustomError';
 
-export default class DBUser { 
+export default class DBUser {
     // TODO: process test for new embeded user
     // TODO: embed other class functions to here
     _Id: string;
@@ -51,7 +51,7 @@ export default class DBUser {
         this._CreationDate = _user._CreationDate;
         this._UpdatedDate = _user._UpdatedDate;
         this.Collections = _user.Collections;
-        return this;
+        return { ...this };
     }
 
     Update = async (Password: string): Promise<DBUser> => {

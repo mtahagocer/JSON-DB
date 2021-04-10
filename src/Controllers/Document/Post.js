@@ -3,12 +3,12 @@ import CustomError from '../../Entity/CustomError';
 import asyncHandler from 'express-async-handler';
 
 export default asyncHandler(async (req, res) => {
-    const { User: { Id } } = req;
+    const { User: { _Id } } = req;
     const { CollectionName, Document } = req.body;
 
     if (!Document) throw new CustomError('"Document" is required');
 
-    const _collection = new BaseCollection({ UserId: Id, Name: CollectionName });
+    const _collection = new BaseCollection({ UserId: _Id, Name: CollectionName });
 
     const _saved = await _collection.SaveDocument(Document);
 
