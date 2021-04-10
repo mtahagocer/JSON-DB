@@ -2,22 +2,20 @@ import express from 'express';
 import dotenv from 'dotenv';
 import 'dotenv/config';
 import indexRouter from './Routes/index';
-import loggerMV from './Middlewares/Logger/morgan';
-import jwtMV from './Middlewares/JWT';
-import userMV from './Middlewares/User';
 import errorMV from './Middlewares/Error';
 import asyncHandler from 'express-async-handler';
+import './Service/Singleton';
+import middlewares from './Middlewares';
 
 dotenv.config();
 const app = express();
-app.use(loggerMV); // TODO: middleware list push on one
-app.use(jwtMV);
-app.use(asyncHandler(userMV));
+app.use(middlewares);
 app.use(express.json());
+
 // app.use(express.urlencoded({ extended: false }));
 // app.use(cookieParser());
-
 // app.use(express.static(path.join(__dirname, '../public')));
+
 app.on('listening', () => {
     console.log(`Listening on ${process.env.PORT}`);
 });
