@@ -5,6 +5,7 @@ import CustomError from '../CustomError';
 export default class BaseDocument { 
     // TODO: process test for new embeded user
     // TODO: delete process for bigdata
+    // TODO: search on nested objects with dot
     static _Id: string;
     static _CreationDate: Date;
     static _UpdateDate: Date;

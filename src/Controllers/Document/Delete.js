@@ -1,6 +1,8 @@
 import BaseCollection from '../../Entity/Collection/BaseCollection';
 import asyncHandler from 'express-async-handler';
 import { handleFilterAlgorithm } from '../../Business/Document';
+import { TypeChecker } from '../../Entity/Concrete/RuntimeTyping';
+import SingletonContainer from '../../Service/Singleton';
 
 export default asyncHandler(async (req, res) => {
     const { User: { _Id } } = req;
@@ -14,6 +16,10 @@ export default asyncHandler(async (req, res) => {
             Strict = true
         } = req.body;
 
+    const typer = SingletonContainer.get('typer');
+    TypeChecker.Check(typer.type({
+        Name: typer.string
+    }), { CollectionName });
 
     const _collection = new BaseCollection({ UserId: _Id, Name: CollectionName });
     const _deletedCount = await _collection.DeleteDocument(handleFilterAlgorithm({
@@ -33,6 +39,6 @@ export default asyncHandler(async (req, res) => {
     res.status(status).json({
         Success: true,
         DocumentCount: _deletedCount,
-        Message: _deletedCount ? 'Documents deleted Successfully' : 'Can not find any documents with this conditions'
+        Message: _deletedCount ? 'Documents deleted successfully' : 'Can not find any documents with this conditions'
     });
 });

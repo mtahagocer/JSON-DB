@@ -29,7 +29,7 @@ export default asyncHandler(async (req, res) => {
     res.status(status).json({
         Success: true,
         DocumentCount: _data.length,
-        Message: 'Document patch Successfully',
+        Message: 'Document patch successfully',
         Documents: _data
     });
 });

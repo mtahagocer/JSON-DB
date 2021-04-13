@@ -4,6 +4,11 @@ import { stringify } from '../../Helpers';
 import CustomError from '../../Entity/CustomError';
 import { filterByPatch, filterByKeyAndValue } from '../../Helpers';
 import { SearchTypes } from '../../Constants/Business';
+import { TypeChecker } from '../../Entity/Concrete/RuntimeTyping';
+import SingletonContainer from '../../Service/Singleton';
+
+const typer = SingletonContainer.get('typer');
+
 export const getDocumentPath = (UserId, CollectionName) => `${getCollectionPath(UserId, CollectionName)}/data.json`;
 
 const _writeDocument = async (UserId, CollectionName, Document) => await fs.writeFile(getDocumentPath(UserId, CollectionName), stringify(Document));
@@ -59,6 +64,11 @@ export const deleteDocument = async (UserId, CollectionName, filter) => {
 };
 
 export const handleFilterAlgorithm = ({ SearchType, Patch, Strict, KeyList, ValueList }) => {
+
+    TypeChecker.Check(typer.type({
+        SearchType: typer.string
+    }), { SearchType });
+
     // TODO: control patch for delete  
     switch (SearchType) {
 

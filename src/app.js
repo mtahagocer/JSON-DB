@@ -4,7 +4,7 @@ import 'dotenv/config';
 import indexRouter from './Routes/index';
 import errorMV from './Middlewares/Error';
 import asyncHandler from 'express-async-handler';
-import './Service/Singleton';
+import './Service/Singleton/create';
 import middlewares from './Middlewares';
 
 dotenv.config();

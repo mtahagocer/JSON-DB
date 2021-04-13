@@ -1,17 +1,22 @@
 import BaseCollection from '../../Entity/Collection/BaseCollection';
-import CustomError from '../../Entity/CustomError';
 import asyncHandler from 'express-async-handler';
+import { TypeChecker } from '../../Entity/Concrete/RuntimeTyping';
+import SingletonContainer from '../../Service/Singleton';
 
 export default asyncHandler(async (req, res) => {
     const { User: { _Id } } = req;
-    const { CollectionName, force = false } = req.body;
+    const { Name, force = false } = req.body;
 
-    if (!CollectionName) throw new CustomError('Collection "Name" is required');
-    const _collection = new BaseCollection({ Name: CollectionName, UserId: _Id });
+    const typer = SingletonContainer.get('typer');
+    TypeChecker.Check(typer.type({
+        Name: typer.string
+    }), { Name });
+
+    const _collection = new BaseCollection({ Name, UserId: _Id });
     await _collection.Delete(force);
 
     res.json({
         Success: true,
-        Message: `Collection ${CollectionName} deleted Successfully`
+        Message: `Collection ${Name} deleted successfully`
     });
 });
