@@ -9,3 +9,8 @@ export const TBaseCollection = Typer.type({
     UpdateDate: Typer.string,
     UserId: Typer.string
 });
+
+export const TDatabaseUser = Typer.type({
+    UserName: Typer.string,
+    Password: Typer.string
+});
