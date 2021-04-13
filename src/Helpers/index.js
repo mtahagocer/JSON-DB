@@ -76,11 +76,6 @@ export const required = (Message) => {
     throw new CustomError(Message);
 };
 
-export const checkType = (data, type) => {
-    if (!Types[type](data)) throw new CustomError(`For ${JSON.stringify(data)} expected type have to be ${type}!`);
-    return true;
-};
-
 export const stringify = (data) => JSON.stringify(data, null, isProduction ? 0 : 2);
 
 // #endregion
