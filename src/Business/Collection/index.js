@@ -1,6 +1,7 @@
 import fs from '../../Service/File';
 import CustomError from '../../Entity/CustomError';
 import { dbPath, stringify } from '../../Helpers';
+import { types } from '../../Constants/Type';
 
 export const getCollectionPath = (UserId, Name) => dbPath(`${UserId}/${Name}`);
 
@@ -11,9 +12,17 @@ export const controlCollection = async (UserId, CollectionName) => {
 
 export const getCollectionFilePath = (UserId, Name) => dbPath(`${UserId}/${Name}/index.json`);
 
+export const isValidSchema = ({ Scheme }) => {
+    Object.keys(Scheme).forEach((key) => {
+        if (!types.some((tp) => tp === Scheme[key])) {
+            throw new CustomError('Scheme values must be types and strings');
+        }
+    });
+};
+
 export const createCollection = async (Collection) => {
     if (fs.isExist(getCollectionPath(Collection.UserId, Collection.Name))) throw new CustomError(`There is a already Collection with Name = ${Collection.Name}`);
-
+    isValidSchema(Collection);
     await fs.checkDirectory(getCollectionPath(Collection.UserId, Collection.Name));
     await fs.writeFile(getCollectionFilePath(Collection.UserId, Collection.Name), stringify(Collection));
     await fs.writeFile(`${getCollectionPath(Collection.UserId, Collection.Name)}/data.json`, stringify([]));
@@ -21,11 +30,10 @@ export const createCollection = async (Collection) => {
 
 export const getCollection = async (Collection) => {
     await controlCollection(Collection.UserId, Collection.Name);
-    return await fs.readFile(getCollectionFilePath(Collection.UserId, Collection.Name)).then((data) => {
-        return data;
-    }).catch((err) => {
-        throw new CustomError(err.message);
-    });
+    return await fs.readFile(getCollectionFilePath(Collection.UserId, Collection.Name)).then((data) => data).
+        catch((err) => {
+            throw new CustomError(err.message);
+        });
 };
 
 export const updateCollection = async (Collection) => {
