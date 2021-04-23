@@ -21,8 +21,7 @@ export default asyncHandler(async (req, res) => {
         Strict,
         KeyList,
         ValueList
-    })
-    );
+    }));
 
     const status = _data.length > 0 ? 200 : 404;
 

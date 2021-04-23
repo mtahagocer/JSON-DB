@@ -5,7 +5,7 @@ import SingletonContainer from '../../Service/Singleton';
 
 export default asyncHandler(async (req, res) => {
     const { User: { _Id } } = req;
-    const { Name, force = false } = req.body;
+    const { Name, Force = false } = req.body;
 
     const typer = SingletonContainer.get('typer');
     TypeChecker.Check(typer.type({
@@ -13,7 +13,7 @@ export default asyncHandler(async (req, res) => {
     }), { Name });
 
     const _collection = new BaseCollection({ Name, UserId: _Id });
-    await _collection.Delete(force);
+    await _collection.Delete(Force);
 
     res.json({
         Success: true,

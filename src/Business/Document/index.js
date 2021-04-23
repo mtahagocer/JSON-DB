@@ -2,12 +2,10 @@ import fs from '../../Service/File';
 import { getCollectionPath, controlCollection } from '../Collection';
 import { stringify } from '../../Helpers';
 import CustomError from '../../Entity/CustomError';
-import { filterByPatch, filterByKeyAndValue } from '../../Helpers';
+import { filterByPatch, filterByKeyAndValue, deepEqual } from '../../Helpers';
 import { SearchTypes } from '../../Constants/Business';
 import { TypeChecker } from '../../Entity/Concrete/RuntimeTyping';
 import SingletonContainer from '../../Service/Singleton';
-
-const typer = SingletonContainer.get('typer');
 
 export const getDocumentPath = (UserId, CollectionName) => `${getCollectionPath(UserId, CollectionName)}/data.json`;
 
@@ -16,7 +14,6 @@ const _writeDocument = async (UserId, CollectionName, Document) => await fs.writ
 export const getDocument = async (UserId, CollectionName, filter) => {
     if (await controlCollection(UserId, CollectionName)) {
         let data = await fs.readFile(getDocumentPath(UserId, CollectionName));
-
         if (filter) {
             data = data.filter(filter);
         }
@@ -54,38 +51,39 @@ export const updateDocument = async (UserId, CollectionName, Document, Replace =
     return prev[docIndex];
 };
 
-export const deleteDocument = async (UserId, CollectionName, filter) => {
+export const deleteDocument = async (UserId, CollectionName, patch) => {
     let data = await getDocument(UserId, CollectionName);
     const dataLength = data.length;
-    const filtered = await data.filter(filter);
+    const filtered = await data.filter((d) => !deepEqual(d, patch));
+
     await _writeDocument(UserId, CollectionName, filtered);
 
     return dataLength - filtered.length;
 };
 
 export const handleFilterAlgorithm = ({ SearchType, Patch, Strict, KeyList, ValueList }) => {
-
-    TypeChecker.Check(typer.type({
+    const typer = SingletonContainer.get('typer');
+    TypeChecker.Check(typer.type({ // TODO: return typer callback
         SearchType: typer.string
     }), { SearchType });
 
-    // TODO: control patch for delete  
+    const _condition = (!Patch || !Object.keys(Patch).length || typeof Patch !== 'object' || Array.isArray(Patch));
     switch (SearchType) {
 
-        case SearchTypes[0]: {
-            if ((!Patch || !Object.keys(Patch).length || typeof Patch !== 'object' || Array.isArray(Patch))) throw new CustomError(`Patch must be a object and required for ${SearchTypes[0]}`);
+        case SearchTypes.Patch: {
+            if (_condition) throw new CustomError(`Patch must be a object and required for ${SearchTypes.Patch}`);
 
             return filterByPatch(Patch, false);
         }
 
-        case SearchTypes[1]: {
-            if ((!Patch || !Object.keys(Patch).length || typeof Patch !== 'object' || Array.isArray(Patch))) throw new CustomError(`Patch must be a object and required for ${SearchTypes[1]}`);
+        case SearchTypes.DeepPatch: {
+            if (_condition) throw new CustomError(`Patch must be a object and required for ${SearchTypes.DeepPatch}`);
 
-            return filterByPatch(Patch, true);
+            return filterByPatch(Patch, false);
         }
 
-        case SearchTypes[2]: {
-            if (!KeyList && !ValueList) throw new CustomError(`KeyList and ValueList required for ${SearchTypes[2]}`);
+        case SearchTypes.KeyValue: {
+            if (!KeyList && !ValueList) throw new CustomError(`KeyList and ValueList required for ${SearchTypes.KeyValue}`);
             if ((!Array.isArray(KeyList)) || (!Array.isArray(ValueList))) throw new CustomError('"KeyList" and "ValueList" must be a array');
             if (KeyList.some((item) => typeof item !== 'string')) throw new CustomError('"KeyList items" must be a string object key.');
             if (Strict !== undefined && typeof Strict !== 'boolean') throw new CustomError('"Strict" must be a boolean');

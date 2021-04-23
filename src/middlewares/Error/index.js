@@ -11,7 +11,7 @@ export default function (err, req, res, next) {
     if (err) {
         const { Status, Message, Name, message } = err;
 
-        // console.log(err);
+        process.env.NODE_ENV !== 'production' && console.log(err);
 
         return res.status(Status || 400).json({
             Success: false,

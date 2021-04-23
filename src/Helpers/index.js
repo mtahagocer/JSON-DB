@@ -1,7 +1,6 @@
 import 'dotenv/config';
 import * as uuid from 'uuid';
 import Paths from '../Constants/Path';
-import Types from '../Constants/Type';
 import { isProduction } from '../Constants/Business';
 import CustomError from '../Entity/CustomError';
 import jwt from 'jsonwebtoken';

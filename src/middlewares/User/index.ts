@@ -13,8 +13,12 @@ export default async function extractUser(req, res, next) {
 
     if (token) {
         const { _Id } = await _decode(token);
-        req.User = await new BaseUser(_Id).Get();
-        if (!req.User) throw new CustomError('User not found');
+        const invalidTokenHandler = () => {
+            if (!req.User) return res.status(400).json({ ...new CustomError('User not found') });
+        };
+        req.User = await new BaseUser(_Id).Get().catch(invalidTokenHandler);
+        if (!req.User) invalidTokenHandler();
+
     }
     next();
 }

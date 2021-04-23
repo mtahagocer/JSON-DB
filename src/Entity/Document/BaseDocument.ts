@@ -2,10 +2,7 @@ import * as DocumentActions from '../../Business/Document';
 import * as Helpers from '../../Helpers';
 import CustomError from '../CustomError';
 
-export default class BaseDocument { 
-    // TODO: process test for new embeded user
-    // TODO: delete process for bigdata
-    // TODO: search on nested objects with dot
+export default class BaseDocument {
     static _Id: string;
     static _CreationDate: Date;
     static _UpdateDate: Date;
@@ -27,8 +24,8 @@ export default class BaseDocument {
         return await DocumentActions.updateDocument(UserId, CollectionName, { ...Document, _UpdatedDate: new Date(Date.now()) }, Replace);
     }
 
-    static Delete = async (UserId: string, CollectionName: string, filter: Function): Promise<Number> => {
-        return await DocumentActions.deleteDocument(UserId, CollectionName, filter);
+    static Delete = async (UserId: string, CollectionName: string, patch: Function): Promise<Number> => {
+        return await DocumentActions.deleteDocument(UserId, CollectionName, patch);
     }
 
 }

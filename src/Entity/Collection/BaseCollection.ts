@@ -54,8 +54,8 @@ export default class BaseCollection {
         return await BaseDocument.Update(this.UserId, this.Name, Document, Replace);
     }
 
-    DeleteDocument = async (filter: Function) => {
-        return await BaseDocument.Delete(this.UserId, this.Name, filter);
+    DeleteDocument = async (patch: any) => {
+        return await BaseDocument.Delete(this.UserId, this.Name, patch);
     }
 
     // #endregion
